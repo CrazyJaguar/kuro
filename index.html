@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KURO — Coffee & Culture</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="dark"] {
+    --bg:      #0A0A0A;
+    --bg2:     #111111;
+    --bg3:     #181818;
+    --surface: #141414;
+    --s2:      #1E1E1E;
+    --text:    #F0EDE8;
+    --text2:   #A09890;
+    --text3:   #605850;
+    --accent:  #B8F025;
+    --accent2: #96CC18;
+    --acc-dim: rgba(184,240,37,0.1);
+    --acc-glow:rgba(184,240,37,0.25);
+    --red:     #FF4040;
+    --red-dim: rgba(255,64,64,0.12);
+    --border:  #242424;
+    --border2: #2E2E2E;
+    --gold:    #E8C870;
+    --shadow:  rgba(0,0,0,0.6);
+    --nav-bg:  rgba(10,10,10,0.94);
+    --tag-bg:  #1A1A1A;
+    --cursor-c:#B8F025;
+  }
+  :root[data-theme="light"] {
+    --bg:      #F2F0EB;
+    --bg2:     #E8E5DE;
+    --bg3:     #DEDAD0;
+    --surface: #FFFFFF;
+    --s2:      #F8F6F1;
+    --text:    #0D0D0D;
+    --text2:   #4A4540;
+    --text3:   #8A8078;
+    --accent:  #3D7A00;
+    --accent2: #2E5C00;
+    --acc-dim: rgba(61,122,0,0.08);
+    --acc-glow:rgba(61,122,0,0.2);
+    --red:     #CC2020;
+    --red-dim: rgba(204,32,32,0.1);
+    --border:  #D8D4CC;
+    --border2: #C8C4BC;
+    --gold:    #B89830;
+    --shadow:  rgba(0,0,0,0.1);
+    --nav-bg:  rgba(242,240,235,0.94);
+    --tag-bg:  #ECEAE4;
+    --cursor-c:#3D7A00;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    font-family:'Plus Jakarta Sans', sans-serif;
+    background:var(--bg); color:var(--text);
+    overflow-x:hidden;
+    transition:background .4s,color .4s;
+    cursor:none;
+  }
+
+  /* custom cursor */
+  .cursor {
+    position:fixed; width:10px; height:10px;
+    background:var(--cursor-c); border-radius:50%;
+    pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    transition:transform .1s, width .2s, height .2s;
+    mix-blend-mode:difference;
+  }
+  .cursor-ring {
+    position:fixed; width:36px; height:36px;
+    border:1.5px solid var(--cursor-c); border-radius:50%;
+    pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:transform .12s ease-out, width .3s, height .3s, opacity .3s;
+    opacity:0.5; mix-blend-mode:difference;
+  }
+  body:hover .cursor { opacity:1; }
+  @media (hover:none) { .cursor,.cursor-ring { display:none; } body { cursor:auto; } }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width:3px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--accent); }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:var(--nav-bg); backdrop-filter:blur(24px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner {
+    max-width:1400px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 32px; height:60px;
+  }
+  .logo {
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:1.6rem; font-weight:700; letter-spacing:-0.02em;
+    color:var(--text); cursor:pointer;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-accent { color:var(--accent); }
+  .nav-center {
+    display:flex; gap:2px; list-style:none;
+  }
+  .nav-center a {
+    font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--text3); padding:8px 16px; cursor:pointer; text-decoration:none;
+    transition:color .2s; position:relative;
+  }
+  .nav-center a::after {
+    content:''; position:absolute; bottom:4px; left:16px; right:16px;
+    height:2px; background:var(--accent); transform:scaleX(0);
+    transition:transform .2s; transform-origin:left;
+  }
+  .nav-center a:hover, .nav-center a.active { color:var(--text); }
+  .nav-center a:hover::after, .nav-center a.active::after { transform:scaleX(1); }
+
+  .nav-right { display:flex; align-items:center; gap:10px; }
+  .theme-toggle {
+    display:flex; align-items:center; gap:8px;
+    background:var(--bg3); border:1px solid var(--border2);
+    border-radius:100px; padding:5px 14px 5px 5px;
+    cursor:pointer; transition:all .3s;
+  }
+  .tt-knob {
+    width:28px; height:28px; border-radius:50%;
+    background:var(--accent); display:flex; align-items:center; justify-content:center;
+    font-size:.9rem; transition:all .3s;
+  }
+  .tt-label { font-size:.7rem; font-weight:700; letter-spacing:.1em; color:var(--text3); text-transform:uppercase; }
+  .theme-toggle:hover { border-color:var(--accent); }
+
+  .nav-order-btn {
+    background:var(--accent); color:#0A0A0A;
+    border:none; padding:9px 20px; border-radius:4px;
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.72rem; font-weight:800;
+    letter-spacing:.04em; text-transform:uppercase; cursor:pointer;
+    transition:all .25s;
+  }
+  .nav-order-btn:hover { background:var(--accent2); transform:translateY(-1px); }
+
+  .hamburger {
+    display:none; flex-direction:column; gap:5px;
+    background:none; border:none; cursor:pointer; padding:6px;
+  }
+  .hamburger span {
+    width:22px; height:1.5px; background:var(--text); display:block; transition:all .3s;
+  }
+
+  /* ── MOBILE MENU ── */
+  .mob-menu {
+    display:none; position:fixed; top:60px; left:0; right:0; z-index:99;
+    background:var(--bg2); border-bottom:1px solid var(--border);
+    padding:20px 24px 28px; flex-direction:column; gap:4px;
+    box-shadow:0 20px 40px var(--shadow);
+  }
+  .mob-menu.open { display:flex; }
+  .mob-menu a {
+    font-size:.78rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--text2); padding:14px 0; border-bottom:1px solid var(--border);
+    cursor:pointer; text-decoration:none; transition:color .2s;
+  }
+  .mob-menu a:hover { color:var(--accent); }
+
+  /* ── PAGES ── */
+  .page { display:none; min-height:100vh; padding-top:60px; }
+  .page.active { display:block; }
+
+  /* ══════════════════════
+     HOME
+  ══════════════════════ */
+
+  /* HERO — full bleed, editorial grid */
+  .hero {
+    position:relative; min-height:calc(100vh - 60px);
+    display:grid; grid-template-columns:1fr 1fr;
+    overflow:hidden;
+  }
+
+  .hero-left {
+    background:var(--bg);
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:60px 48px 60px 60px; position:relative;
+    border-right:1px solid var(--border);
+  }
+  .hero-eyebrow {
+    display:flex; align-items:center; gap:12px;
+    font-size:.72rem; font-weight:500; letter-spacing:.08em;
+    color:var(--text3); margin-bottom:28px;
+  }
+  .hero-eyebrow-line { flex:1; height:1px; background:var(--border2); max-width:60px; }
+  .hero-big-text {
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:800;
+    font-size:clamp(2.2rem,5vw,3.8rem);
+    line-height:1.1; letter-spacing:-0.02em; color:var(--text);
+    margin-bottom:0;
+  }
+  .hero-big-text .outline {
+    color:var(--text3);
+  }
+  .hero-big-text .green { color:var(--accent); }
+
+  .hero-right {
+    background:var(--bg2); position:relative; overflow:hidden;
+    display:flex; flex-direction:column; justify-content:space-between; padding:48px;
+  }
+  .hero-right-top {
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .hero-number {
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:200;
+    font-size:6rem; line-height:1; color:var(--border2);
+    position:absolute; right:24px; top:24px; pointer-events:none;
+    user-select:none;
+  }
+  .hero-right-bottom { position:relative; z-index:2; }
+  .hero-desc {
+    font-size:.9rem; color:var(--text2); line-height:1.75; font-weight:400;
+    max-width:320px; margin-bottom:36px;
+  }
+  .hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+
+  .btn-primary {
+    background:var(--accent); color:#0A0A0A;
+    border:none; padding:14px 28px; border-radius:4px;
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.78rem; font-weight:800;
+    letter-spacing:.04em; text-transform:uppercase; cursor:pointer;
+    transition:all .25s; display:inline-flex; align-items:center; gap:10px;
+  }
+  .btn-primary:hover { background:var(--accent2); transform:translateY(-2px); box-shadow:0 8px 32px var(--acc-glow); }
+  .btn-ghost {
+    background:transparent; color:var(--text);
+    border:1px solid var(--border2); padding:13px 24px; border-radius:4px;
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.78rem; font-weight:700;
+    letter-spacing:.04em; text-transform:uppercase; cursor:pointer;
+    transition:all .25s; display:inline-flex; align-items:center; gap:10px;
+  }
+  .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+
+  .hero-stat-strip {
+    display:flex; border-top:1px solid var(--border);
+    margin-top:48px;
+  }
+  .hero-stat-item {
+    flex:1; padding:20px 32px 20px 0; border-right:1px solid var(--border);
+  }
+  .hero-stat-item:last-child { border-right:none; padding-right:0; padding-left:0; padding:20px 0; }
+  .hero-stat-num {
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:700;
+    font-size:2rem; letter-spacing:-0.02em; color:var(--accent); line-height:1;
+  }
+  .hero-stat-label { font-size:.65rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text3); margin-top:4px; }
+
+  /* Diagonal accent bar */
+  .hero-accent-bar {
+    position:absolute; bottom:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  /* Floating elements in hero right */
+  .hero-tag-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--bg3); border:1px solid var(--border2);
+    border-radius:2px; padding:8px 14px;
+    font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text3); margin-bottom:12px;
+  }
+  .pill-dot { width:6px; height:6px; background:var(--accent); border-radius:50%; }
+
+  /* ── TICKER ── */
+  .ticker {
+    background:var(--accent); padding:10px 0; overflow:hidden;
+    border-top:none; border-bottom:none;
+  }
+  .ticker-track {
+    display:flex; gap:0; animation:ticker 18s linear infinite; white-space:nowrap;
+  }
+  .ticker-track span {
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:700;
+    font-size:.82rem; letter-spacing:.02em; color:#0A0A0A;
+    padding:0 32px; flex-shrink:0;
+    border-right:1px solid rgba(0,0,0,0.15);
+  }
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── SECTION UTILITY ── */
+  .s-label {
+    font-size:.75rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:10px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .s-label::before { content:'//'; opacity:.5; }
+  .s-title {
+    font-family:'Lora', serif;
+    font-size:clamp(2rem,4vw,3.2rem); font-weight:600; letter-spacing:-0.02em;
+    color:var(--text); line-height:1.1; margin-bottom:0;
+  }
+  .s-title .outline {
+    color:var(--text3);
+  }
+
+  /* ── OFFERINGS ── */
+  .offerings { padding:100px 60px; max-width:1400px; margin:0 auto; }
+  .off-header {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:60px; flex-wrap:wrap; gap:20px;
+  }
+  .off-grid {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--border); border:1px solid var(--border);
+  }
+  .off-card {
+    background:var(--bg); padding:40px 36px;
+    display:flex; flex-direction:column;
+    transition:background .3s; cursor:pointer; position:relative; overflow:hidden;
+  }
+  .off-card::after {
+    content:''; position:absolute; left:0; bottom:0; right:0; height:2px;
+    background:var(--accent); transform:scaleX(0); transform-origin:left;
+    transition:transform .3s;
+  }
+  .off-card:hover { background:var(--bg2); }
+  .off-card:hover::after { transform:scaleX(1); }
+  .off-num {
+    font-family:'Lora', serif;
+    font-size:3rem; font-weight:300; line-height:1; color:var(--border2);
+    margin-bottom:24px; transition:color .3s;
+  }
+  .off-card:hover .off-num { color:var(--acc-dim); }
+  .off-icon { font-size:2rem; margin-bottom:16px; }
+  .off-title {
+    font-family:'Lora', serif;
+    font-size:1.2rem; font-weight:600; letter-spacing:-0.01em; color:var(--text); margin-bottom:12px;
+  }
+  .off-desc { font-size:.84rem; color:var(--text2); line-height:1.7; font-weight:400; flex:1; }
+  .off-link {
+    margin-top:24px; font-size:.68rem; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--accent);
+    display:flex; align-items:center; gap:8px;
+  }
+  .off-link .arr { transition:transform .2s; }
+  .off-card:hover .arr { transform:translateX(6px); }
+
+  /* ── FEATURE ROW ── */
+  .feature-row {
+    display:grid; grid-template-columns:1fr 1fr; min-height:500px;
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  }
+  .fr-left {
+    padding:80px 60px; display:flex; flex-direction:column; justify-content:center;
+    border-right:1px solid var(--border);
+  }
+  .fr-right {
+    background:var(--bg2); display:grid; grid-template-columns:1fr 1fr;
+    gap:1px; background-color:var(--border);
+  }
+  .fr-mini {
+    background:var(--bg2); padding:32px 28px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    min-height:220px;
+  }
+  .fr-mini-top { font-size:1.6rem; margin-bottom:12px; }
+  .fr-mini-title {
+    font-family:'Lora', serif;
+    font-size:1rem; font-weight:600; letter-spacing:-0.01em; color:var(--text); margin-bottom:6px;
+  }
+  .fr-mini-desc { font-size:.76rem; color:var(--text2); line-height:1.6; }
+  .fr-mini-tag {
+    font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--accent); margin-top:16px;
+  }
+
+  /* ── MENU PAGE ── */
+  .menu-masthead {
+    background:var(--bg); padding:80px 60px 0;
+    border-bottom:1px solid var(--border);
+    max-width:1400px; margin:0 auto;
+  }
+  .menu-masthead-inner {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:24px; padding-bottom:40px;
+    border-bottom:1px solid var(--border);
+  }
+
+  .menu-filter-bar {
+    display:flex; gap:0; overflow-x:auto;
+    padding:0 60px; max-width:1400px; margin:0 auto;
+    border-bottom:1px solid var(--border);
+    scrollbar-width:none;
+  }
+  .menu-filter-bar::-webkit-scrollbar { display:none; }
+  .mf-btn {
+    flex-shrink:0; padding:18px 28px;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--text3); background:transparent; border:none; cursor:pointer;
+    transition:all .2s; border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .mf-btn:hover { color:var(--text); }
+  .mf-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+  .menu-body { max-width:1400px; margin:0 auto; padding:0 60px 80px; }
+  .menu-section { padding:56px 0; border-bottom:1px solid var(--border); }
+  .menu-section:last-child { border-bottom:none; }
+  .menu-s-header { margin-bottom:40px; }
+  .menu-s-title {
+    font-family:'Lora', serif;
+    font-size:1.4rem; font-weight:700; letter-spacing:-0.01em; color:var(--text);
+    display:flex; align-items:center; gap:20px;
+  }
+  .menu-s-title .ms-bar { flex:1; height:1px; background:var(--border); max-width:200px; }
+  .menu-s-sub { font-size:.8rem; color:var(--text3); margin-top:6px; font-style:italic; }
+
+  .menu-list { display:flex; flex-direction:column; gap:0; }
+  .menu-row {
+    display:grid; grid-template-columns:60px 1fr auto;
+    align-items:center; gap:24px;
+    padding:22px 0; border-bottom:1px solid var(--border);
+    cursor:pointer; transition:background .2s;
+    border-radius:2px;
+  }
+  .menu-row:last-child { border-bottom:none; }
+  .menu-row:hover { background:var(--bg2); padding-left:8px; padding-right:8px; margin:0 -8px; }
+  .menu-row-icon {
+    width:52px; height:52px; border-radius:4px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+  }
+  .menu-row-main { flex:1; }
+  .menu-row-name {
+    font-family:'Lora', serif; font-size:1.3rem;
+    font-size:1rem; font-weight:600; color:var(--text); margin-bottom:4px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .menu-row-desc { font-size:.78rem; color:var(--text3); line-height:1.5; }
+  .menu-row-right { text-align:right; flex-shrink:0; }
+  .menu-row-price {
+    font-size:1rem; font-weight:700; color:var(--accent);
+  }
+  .menu-row-tags { display:flex; gap:4px; margin-top:6px; justify-content:flex-end; flex-wrap:wrap; }
+  .m-tag {
+    font-size:.58rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    padding:3px 8px; border-radius:2px;
+  }
+  .m-tag.v { background:rgba(61,200,80,0.1); color:#3DC850; }
+  .m-tag.s { background:rgba(255,64,64,0.1); color:var(--red); }
+  .m-tag.n { background:var(--acc-dim); color:var(--accent); }
+  .m-tag.b { background:rgba(232,200,112,0.1); color:var(--gold); }
+  .m-tag.c { background:rgba(80,150,255,0.1); color:#5096FF; }
+
+  /* ── ABOUT ── */
+  .about-masthead {
+    background:var(--bg); border-bottom:1px solid var(--border);
+  }
+  .about-masthead-inner {
+    max-width:1400px; margin:0 auto; padding:80px 60px;
+    display:grid; grid-template-columns:1.2fr 1fr; gap:80px; align-items:center;
+  }
+  .about-left { }
+  .about-big-quote {
+    font-family:'Lora', serif;
+    font-size:clamp(1.1rem,2.5vw,1.5rem); font-weight:400;
+    line-height:1.6; color:var(--text2); margin:28px 0; font-style:italic;
+  }
+  .about-big-quote em { color:var(--accent); font-style:normal; }
+  .about-right { border-left:1px solid var(--border); padding-left:60px; }
+  .about-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin-top:40px; }
+  .about-stat {
+    background:var(--bg2); padding:32px 28px;
+  }
+  .about-stat-num {
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:2.2rem; font-weight:700; letter-spacing:-0.02em;
+    color:var(--accent); line-height:1;
+  }
+  .about-stat-label { font-size:.68rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text3); margin-top:6px; }
+
+  .team-section { max-width:1400px; margin:0 auto; padding:80px 60px; border-bottom:1px solid var(--border); }
+  .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-top:48px; }
+  .team-card {
+    background:var(--bg); padding:40px 32px; position:relative; overflow:hidden;
+    transition:background .3s;
+  }
+  .team-card:hover { background:var(--bg2); }
+  .team-avatar {
+    width:72px; height:72px; border-radius:4px; margin-bottom:20px;
+    display:flex; align-items:center; justify-content:center; font-size:2.2rem;
+  }
+  .team-name {
+    font-family:'Lora', serif; font-size:1.8rem;
+    font-size:1rem; font-weight:600; color:var(--text); margin-bottom:4px;
+  }
+  .team-role { font-size:.68rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; }
+  .team-bio { font-size:.82rem; color:var(--text2); line-height:1.65; }
+  .team-num {
+    position:absolute; right:24px; bottom:16px;
+    font-size:4rem; font-weight:200;
+    color:var(--border2); line-height:1; user-select:none;
+  }
+
+  .values-section-k { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .values-inner { max-width:1400px; margin:0 auto; padding:80px 60px; }
+  .values-row {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--border); margin-top:48px;
+  }
+  .val-card {
+    background:var(--bg2); padding:36px 28px; border-bottom:none;
+  }
+  .val-num {
+    font-size:.78rem; font-weight:600;
+    letter-spacing:.1em; color:var(--text3); margin-bottom:16px;
+  }
+  .val-title {
+    font-size:1.1rem; font-weight:700; letter-spacing:-0.01em;
+    color:var(--text); margin-bottom:12px;
+  }
+  .val-desc { font-size:.8rem; color:var(--text2); line-height:1.65; }
+
+  /* ── CONTACT ── */
+  .contact-masthead {
+    max-width:1400px; margin:0 auto; padding:80px 60px 0;
+  }
+  .contact-body {
+    max-width:1400px; margin:0 auto; padding:60px 60px 80px;
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--border); border:1px solid var(--border);
+  }
+  .contact-left { background:var(--bg); padding:60px; }
+  .contact-right { background:var(--bg2); padding:60px; }
+
+  .form-label-k {
+    display:block; font-size:.65rem; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--text3); margin-bottom:8px;
+  }
+  .form-input-k {
+    width:100%; padding:14px 0; border-radius:0;
+    border:none; border-bottom:1px solid var(--border2);
+    background:transparent; color:var(--text);
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.9rem; font-weight:400;
+    transition:border-color .2s; outline:none;
+  }
+  .form-input-k:focus { border-bottom-color:var(--accent); }
+  .form-input-k::placeholder { color:var(--text3); }
+  .form-group-k { margin-bottom:28px; }
+  .form-row-k { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+  .form-select-k {
+    width:100%; padding:14px 0; border-radius:0;
+    border:none; border-bottom:1px solid var(--border2);
+    background:transparent; color:var(--text);
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.9rem; font-weight:400;
+    outline:none; cursor:pointer; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23605850' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 4px center;
+    transition:border-color .2s;
+  }
+  .form-select-k option { background:var(--bg2); }
+  .form-select-k:focus { border-bottom-color:var(--accent); }
+  .form-textarea-k {
+    width:100%; padding:14px 0; border-radius:0;
+    border:none; border-bottom:1px solid var(--border2);
+    background:transparent; color:var(--text);
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.9rem;
+    outline:none; resize:none; min-height:90px;
+    transition:border-color .2s;
+  }
+  .form-textarea-k:focus { border-bottom-color:var(--accent); }
+  .form-textarea-k::placeholder { color:var(--text3); }
+
+  .submit-k {
+    width:100%; padding:18px; background:var(--accent); color:#0A0A0A;
+    border:none; border-radius:4px; margin-top:32px;
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.78rem; font-weight:800;
+    letter-spacing:.05em; text-transform:uppercase; cursor:pointer;
+    transition:all .25s; display:flex; align-items:center; justify-content:center; gap:12px;
+  }
+  .submit-k:hover { background:var(--accent2); box-shadow:0 8px 32px var(--acc-glow); }
+
+  .info-list { list-style:none; display:flex; flex-direction:column; gap:32px; }
+  .info-list li { display:flex; gap:20px; align-items:flex-start; }
+  .il-icon {
+    width:44px; height:44px; border:1px solid var(--border2); border-radius:4px;
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+    flex-shrink:0; margin-top:3px;
+  }
+  .il-label { font-size:.65rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .il-value { font-size:.9rem; color:var(--text); line-height:1.6; }
+
+  .hours-table { width:100%; border-collapse:collapse; margin-top:36px; }
+  .hours-table tr { border-bottom:1px solid var(--border); }
+  .hours-table tr:last-child { border-bottom:none; }
+  .hours-table td { padding:12px 0; font-size:.84rem; }
+  .hours-table td:first-child { color:var(--text2); }
+  .hours-table td:last-child { color:var(--accent); font-weight:700; text-align:right; font-weight:700; font-size:.9rem; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-k { border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .testi-inner { max-width:1400px; margin:0 auto; padding:80px 60px; }
+  .testi-grid-k { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-top:48px; }
+  .testi-card-k {
+    background:var(--bg); padding:40px 36px;
+    transition:background .3s; cursor:default;
+  }
+  .testi-card-k:hover { background:var(--bg2); }
+  .testi-stars-k { color:var(--accent); font-size:.9rem; letter-spacing:3px; margin-bottom:20px; }
+  .testi-quote-k {
+    font-size:.95rem;
+    color:var(--text); line-height:1.7; margin-bottom:28px; font-weight:300;
+  }
+  .testi-sep { width:32px; height:1px; background:var(--accent); margin-bottom:20px; }
+  .testi-name-k { font-size:.84rem; font-weight:700; letter-spacing:.01em; color:var(--text2); }
+  .testi-role-k { font-size:.68rem; color:var(--text3); margin-top:3px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--bg2); border-top:1px solid var(--border);
+  }
+  .footer-top {
+    max-width:1400px; margin:0 auto; padding:64px 60px 48px;
+    display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:60px;
+    border-bottom:1px solid var(--border);
+  }
+  .footer-logo-k {
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; font-size:1.8rem; letter-spacing:-0.02em;
+    letter-spacing:.1em; color:var(--text); margin-bottom:14px;
+  }
+  .footer-logo-k span { color:var(--accent); }
+  .footer-tagline-k { font-size:.82rem; color:var(--text2); line-height:1.65; max-width:260px; margin-bottom:24px; }
+  .footer-socials-k { display:flex; gap:8px; }
+  .fsoc {
+    width:38px; height:38px; border:1px solid var(--border2); border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all .2s; color:var(--text3); font-size:.85rem;
+  }
+  .fsoc:hover { border-color:var(--accent); color:var(--accent); background:var(--acc-dim); }
+  .footer-col-k h5 {
+    font-size:.65rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--text3); margin-bottom:20px;
+    padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  .footer-col-k ul { list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .footer-col-k ul li a {
+    font-size:.84rem; color:var(--text2); text-decoration:none;
+    cursor:pointer; transition:color .2s; letter-spacing:.02em;
+  }
+  .footer-col-k ul li a:hover { color:var(--accent); }
+  .footer-bottom-k {
+    max-width:1400px; margin:0 auto; padding:20px 60px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+  }
+  .footer-copy-k { font-size:.72rem; color:var(--text3); letter-spacing:.04em; }
+  .footer-badge {
+    display:flex; align-items:center; gap:8px;
+    font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--accent);
+  }
+  .badge-line { width:20px; height:1px; background:var(--accent); }
+
+  /* ── TOAST ── */
+  .toast-k {
+    position:fixed; bottom:28px; right:28px; z-index:999;
+    background:var(--accent); color:#0A0A0A;
+    padding:14px 22px; border-radius:4px;
+    font-family:'Plus Jakarta Sans', sans-serif; font-size:.8rem; font-weight:700; letter-spacing:.06em;
+    display:flex; align-items:center; gap:10px;
+    box-shadow:0 8px 40px var(--acc-glow);
+    transform:translateY(80px); opacity:0;
+    transition:all .4s cubic-bezier(0.34,1.56,0.64,1);
+    max-width:calc(100vw - 56px);
+  }
+  .toast-k.show { transform:translateY(0); opacity:1; }
+
+  /* ── CART SYSTEM (KURO EDITION) ── */
+  .k-cart-pill {
+    position: fixed; bottom: 32px; right: 32px;
+    background: var(--bg2); border: 1px solid var(--border2);
+    padding: 12px 24px; display: flex; align-items: center; gap: 16px;
+    z-index: 5000; cursor: pointer; color: var(--text);
+    opacity: 0; pointer-events: none; transform: translateY(30px);
+    transition: all .5s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 10px 30px var(--shadow);
+  }
+  .k-cart-pill:hover { border-color: var(--accent); }
+  .k-cart-pill.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .k-cart-label {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: .75rem;
+    font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
+  }
+  .k-cart-count {
+    background: var(--accent); color: #0A0A0A;
+    width: 26px; height: 26px; display: flex; align-items: center;
+    justify-content: center; font-size: .75rem; font-weight: 800;
+  }
+
+  .k-cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(12px); z-index: 6000;
+    opacity: 0; pointer-events: none; transition: opacity .4s;
+  }
+  .k-cart-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .k-cart-panel {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -45%);
+    width: 90%; max-width: 520px;
+    max-height: 85vh;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px var(--shadow);
+    opacity: 0; pointer-events: none;
+    transition: all .5s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  .k-cart-overlay.open .k-cart-panel {
+    transform: translate(-50%, -50%);
+    opacity: 1; pointer-events: auto;
+  }
+
+  .k-cart-head {
+    padding: 32px 40px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .k-cart-title { font-family: 'Lora', serif; font-size: 1.6rem; color: var(--text); }
+  .k-cart-close { background: none; border: none; color: var(--text3); font-size: 1.5rem; cursor: pointer; transition: color .2s; }
+  .k-cart-close:hover { color: var(--accent); }
+
+  .k-cart-body { flex: 1; overflow-y: auto; padding: 40px; }
+  .k-cart-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border);
+  }
+  .k-cart-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .k-ci-info { flex: 1; }
+  .k-ci-name { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .k-ci-price { font-family: 'Lora', serif; font-size: 1.1rem; color: var(--text2); }
+  .k-ci-del {
+    background: none; border: 1px solid var(--border2);
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    color: var(--text3); cursor: pointer; transition: all .2s;
+  }
+  .k-ci-del:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
+  .k-cart-empty { text-align: center; color: var(--text3); font-size: .9rem; padding: 60px 0; }
+
+  .k-cart-foot { padding: 40px; background: var(--bg2); border-top: 1px solid var(--border); }
+  .k-cf-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .k-cf-label { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); }
+  .k-cf-val { font-family: 'Lora', serif; font-size: 1.8rem; color: var(--text); }
+
+  .k-cart-step { display: none; flex-direction: column; height: 100%; }
+  .k-cart-step.active { display: flex; }
+
+  .k-success-view { text-align: center; padding: 80px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+  .k-sv-icon { font-size: 3rem; color: var(--accent); margin-bottom: 24px; }
+  .k-sv-title { font-family: 'Lora', serif; font-size: 2rem; margin-bottom: 16px; color: var(--text); }
+  .k-sv-desc { font-size: .95rem; color: var(--text2); line-height: 1.6; margin-bottom: 40px; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:1100px) {
+    .offerings { padding:80px 32px; }
+    .off-grid { grid-template-columns:1fr 1fr; }
+    .menu-masthead, .menu-filter-bar, .menu-body { padding-left:32px; padding-right:32px; }
+    .team-grid { grid-template-columns:1fr 1fr; }
+    .values-row { grid-template-columns:1fr 1fr; }
+    .footer-top { grid-template-columns:1fr 1fr; gap:40px; }
+    .contact-masthead { padding:80px 32px 0; }
+    .contact-body { padding:0 32px 80px; }
+    .testi-inner { padding:80px 32px; }
+    .about-masthead-inner { padding:80px 32px; }
+    .team-section { padding:80px 32px; }
+    .values-inner { padding:80px 32px; }
+    .footer-top { padding:64px 32px 48px; }
+    .footer-bottom-k { padding:20px 32px; }
+  }
+
+  @media(max-width:768px) {
+    .nav-center,.nav-order-btn { display:none; }
+    .hamburger { display:flex; }
+    .hero { grid-template-columns:1fr; }
+    .hero-right { min-height:300px; padding:36px; }
+    .hero-number { font-size:5rem; }
+    .hero-left { padding:40px 28px; border-right:none; border-bottom:1px solid var(--border); }
+    .hero-big-text { font-size:clamp(4rem,15vw,6rem); }
+    .off-grid { grid-template-columns:1fr; }
+    .feature-row { grid-template-columns:1fr; }
+    .fr-right { grid-template-columns:1fr 1fr; }
+    .fr-left { border-right:none; border-bottom:1px solid var(--border); padding:48px 28px; }
+    .about-masthead-inner { grid-template-columns:1fr; }
+    .about-right { border-left:none; border-top:1px solid var(--border); padding-left:0; padding-top:40px; }
+    .about-stat-grid { grid-template-columns:1fr 1fr; }
+    .team-grid { grid-template-columns:1fr; }
+    .values-row { grid-template-columns:1fr 1fr; }
+    .testi-grid-k { grid-template-columns:1fr; }
+    .contact-body { grid-template-columns:1fr; gap:0; }
+    .contact-left,.contact-right { padding:40px 28px; }
+    .contact-masthead { padding:60px 28px 0; }
+    .menu-masthead,.menu-filter-bar,.menu-body { padding-left:20px; padding-right:20px; }
+    .about-masthead-inner { padding:60px 20px; }
+    .team-section,.values-inner,.testi-inner { padding:60px 20px; }
+    .footer-top { grid-template-columns:1fr; gap:32px; padding:48px 20px 32px; }
+    .footer-bottom-k { padding:16px 20px; flex-direction:column; text-align:center; }
+    .offerings { padding:60px 20px; }
+    .hero-stat-strip { flex-direction:column; gap:0; }
+    .hero-stat-item { border-right:none; border-bottom:1px solid var(--border); padding:16px 0; }
+    .form-row-k { grid-template-columns:1fr; gap:0; }
+  }
+
+  @media(max-width:480px) {
+    .fr-right { grid-template-columns:1fr; }
+    .values-row { grid-template-columns:1fr; }
+    .about-stat-grid { grid-template-columns:1fr; }
+    .hero-actions { flex-direction:column; }
+    .btn-primary,.btn-ghost { justify-content:center; }
+    .menu-row { grid-template-columns:44px 1fr; }
+    .menu-row-right { display:none; }
+  }
+
+  /* ── DEVELOPER CTA ── */
+  .kuro-cta-section {
+    padding: 120px 60px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .kuro-cta-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 100px;
+    align-items: center;
+  }
+  .k-cta-tag {
+    font-size: .65rem; font-weight: 800; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 24px; display: block;
+  }
+  .k-cta-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800; line-height: 1;
+    letter-spacing: -0.05em; color: var(--text);
+    margin-bottom: 32px;
+  }
+  .k-cta-title span { color: var(--text3); }
+  .k-cta-desc {
+    font-size: .95rem; color: var(--text2);
+    line-height: 1.8; max-width: 440px;
+    margin-bottom: 48px;
+  }
+  .k-cta-btn {
+    display: inline-flex; align-items: center; gap: 16px;
+    background: var(--accent); color: #0A0A0A;
+    text-decoration: none; padding: 22px 44px;
+    font-size: .75rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .1em;
+    border-radius: 4px; transition: all .4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .k-cta-btn:hover {
+    background: var(--text); color: var(--bg);
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px var(--shadow);
+  }
+
+  /* Mega Toggle in CTA */
+  .k-mega-toggle-wrap {
+    padding: 60px; background: var(--bg2);
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 32px; position: relative;
+  }
+  .k-mega-label {
+    font-size: .65rem; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--text3);
+  }
+  .k-mega-toggle {
+    width: 160px; height: 80px; background: var(--bg3);
+    border: 1px solid var(--border2); border-radius: 100px;
+    cursor: pointer; position: relative; padding: 6px;
+    transition: all .4s;
+  }
+  .k-mega-toggle:hover { border-color: var(--accent); }
+  .k-mega-thumb {
+    width: 66px; height: 66px; background: var(--accent);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 1.8rem;
+    transition: all .5s cubic-bezier(0.85, 0, 0.15, 1);
+  }
+  [data-theme="light"] .k-mega-thumb { transform: translateX(80px); }
+
+  @media (max-width: 1024px) {
+    .kuro-cta-grid { grid-template-columns: 1fr; gap: 60px; }
+    .kiro-cta-section { padding: 80px 32px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+  .fu  { animation:fadeUp .6s ease forwards; }
+  .fu2 { animation:fadeUp .6s .1s ease forwards; opacity:0; }
+  .fu3 { animation:fadeUp .6s .2s ease forwards; opacity:0; }
+  .fu4 { animation:fadeUp .6s .3s ease forwards; opacity:0; }
+  .fu5 { animation:fadeUp .6s .4s ease forwards; opacity:0; }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('home')">
+      KUR<span class="logo-accent">O</span>
+    </div>
+    <ul class="nav-center">
+      <li><a onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
+      <li><a onclick="showPage('menu')" id="nav-menu">Menu</a></li>
+      <li><a onclick="showPage('about')" id="nav-about">Studio</a></li>
+      <li><a onclick="showPage('contact')" id="nav-contact">Reserve</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <div class="tt-knob" id="themeKnob">🌙</div>
+        <span class="tt-label" id="themeLabel">Dark</span>
+      </div>
+      <button class="nav-order-btn" onclick="showPage('contact')">Reserve →</button>
+      <button class="hamburger" id="hamburger" onclick="toggleMob()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a onclick="showPage('home');toggleMob()">Home</a>
+  <a onclick="showPage('menu');toggleMob()">Menu</a>
+  <a onclick="showPage('about');toggleMob()">Studio</a>
+  <a onclick="showPage('contact');toggleMob()">Reserve</a>
+</div>
+
+<!-- ═══════════════════
+     HOME
+═══════════════════ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow fu">
+        <span class="hero-eyebrow-line"></span>
+        Coffee · Culture · Craft
+        <span class="hero-eyebrow-line"></span>
+      </div>
+      <div class="hero-big-text fu2">
+        <div>Pure</div>
+        <div class="outline">Origin</div>
+        <div class="green">Coffee.</div>
+      </div>
+      <div class="hero-stat-strip fu4">
+        <div class="hero-stat-item">
+          <div class="hero-stat-num">12</div>
+          <div class="hero-stat-label">Origins</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num">40+</div>
+          <div class="hero-stat-label">Recipes</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num">5★</div>
+          <div class="hero-stat-label">Rating</div>
+        </div>
+      </div>
+      <div class="hero-accent-bar"></div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-number">01</div>
+      <div class="hero-right-top fu">
+        <div>
+          <div class="hero-tag-pill"><div class="pill-dot"></div>Now Open · 7AM – 10PM</div>
+          <div class="hero-tag-pill"><div class="pill-dot"></div>Kathmandu · Nepal</div>
+        </div>
+      </div>
+      <div class="hero-right-bottom fu3">
+        <p class="hero-desc">
+          Where Japanese precision meets Himalayan terroir. Every cup at KURO is a meditation — sourced with intention, brewed with obsession, served without compromise.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="showPage('menu')">
+            Explore Menu <span>→</span>
+          </button>
+          <button class="btn-ghost" onclick="showPage('contact')">
+            Book a Seat
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Single Origin</span><span>Specialty Coffee</span><span>Artisan Pastry</span>
+      <span>Matcha Ritual</span><span>Cold Brew</span><span>Himalayan Tea</span>
+      <span>Vegan Menu</span><span>Live Events</span><span>Free WiFi</span>
+      <span>Single Origin</span><span>Specialty Coffee</span><span>Artisan Pastry</span>
+      <span>Matcha Ritual</span><span>Cold Brew</span><span>Himalayan Tea</span>
+      <span>Vegan Menu</span><span>Live Events</span><span>Free WiFi</span>
+    </div>
+  </div>
+
+  <!-- Offerings -->
+  <div class="offerings">
+    <div class="off-header">
+      <div>
+        <div class="s-label">What We Do</div>
+        <div class="s-title">Our Craft</div>
+      </div>
+      <button class="btn-ghost" onclick="showPage('menu')">Full Menu →</button>
+    </div>
+    <div class="off-grid">
+      <div class="off-card" onclick="showPage('menu')">
+        <div class="off-num">01</div>
+        <div class="off-icon">☕</div>
+        <div class="off-title">Espresso Bar</div>
+        <p class="off-desc">Precision-pulled shots from a La Marzocca KB90. Every extraction dialled in fresh each morning from our rotating single-origins.</p>
+        <div class="off-link">Explore <span class="arr">→</span></div>
+      </div>
+      <div class="off-card" onclick="showPage('menu')">
+        <div class="off-num">02</div>
+        <div class="off-icon">🍵</div>
+        <div class="off-title">Matcha & Tea</div>
+        <p class="off-desc">Ceremonial-grade Japanese matcha, Himalayan loose leaf, and our own botanical blends — prepared with bamboo whisks and focused attention.</p>
+        <div class="off-link">Explore <span class="arr">→</span></div>
+      </div>
+      <div class="off-card" onclick="showPage('menu')">
+        <div class="off-num">03</div>
+        <div class="off-icon">🧊</div>
+        <div class="off-title">Cold Craft</div>
+        <p class="off-desc">Nitrogen cold brew, sparkling tonics, and seasonal shrubs — brewed slow, served cold, designed to surprise your palate.</p>
+        <div class="off-link">Explore <span class="arr">→</span></div>
+      </div>
+      <div class="off-card" onclick="showPage('menu')">
+        <div class="off-num">04</div>
+        <div class="off-icon">🥐</div>
+        <div class="off-title">Bakery</div>
+        <p class="off-desc">Our kitchen starts at 4:30 AM. Laminated croissants, kouign-amann, and single-origin chocolate tarts — sold till they're gone.</p>
+        <div class="off-link">Explore <span class="arr">→</span></div>
+      </div>
+      <div class="off-card" onclick="showPage('menu')">
+        <div class="off-num">05</div>
+        <div class="off-icon">🍽</div>
+        <div class="off-title">All-Day Kitchen</div>
+        <p class="off-desc">Minimal plates built for flavour. Avocado toasts, grain bowls, seasonal salads, and weekend brunch — ingredient-led, never fussy.</p>
+        <div class="off-link">Explore <span class="arr">→</span></div>
+      </div>
+      <div class="off-card" onclick="showPage('about')">
+        <div class="off-num">06</div>
+        <div class="off-icon">🎧</div>
+        <div class="off-title">Events & Studio</div>
+        <p class="off-desc">Cuppings, barista masterclasses, acoustic sessions, and creative pop-ups. KURO is a platform, not just a café.</p>
+        <div class="off-link">Our Story <span class="arr">→</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Row -->
+  <div class="feature-row">
+    <div class="fr-left">
+      <div class="s-label">Why KURO</div>
+      <div class="s-title" style="margin-bottom:28px">No Shortcuts.</div>
+      <p style="font-size:.9rem;color:var(--text2);line-height:1.75;max-width:400px;margin-bottom:36px">
+        We source directly. We roast in-house. We pay living wages. We use compostable cups. We believe the best cup of coffee you've ever had should also be the most ethical one.
+      </p>
+      <button class="btn-primary" onclick="showPage('about')">Read Our Story →</button>
+    </div>
+    <div class="fr-right">
+      <div class="fr-mini" onclick="showToast('☕ Direct sourcing — always.')">
+        <div>
+          <div class="fr-mini-top">🌍</div>
+          <div class="fr-mini-title">Direct Trade</div>
+          <div class="fr-mini-desc">We know every farmer by name and visit our partner farms annually.</div>
+        </div>
+        <div class="fr-mini-tag">// Ethics First</div>
+      </div>
+      <div class="fr-mini" onclick="showToast('🏆 Award-winning coffee.')">
+        <div>
+          <div class="fr-mini-top">🏆</div>
+          <div class="fr-mini-title">Award Winning</div>
+          <div class="fr-mini-desc">Best Specialty Café — KTM F&B Awards 2023 & 2024.</div>
+        </div>
+        <div class="fr-mini-tag">// Recognized</div>
+      </div>
+      <div class="fr-mini" onclick="showToast('🌿 Zero-waste operations.')">
+        <div>
+          <div class="fr-mini-top">🌿</div>
+          <div class="fr-mini-title">Zero Waste</div>
+          <div class="fr-mini-desc">Compostable packaging, electric delivery, rooftop herb garden.</div>
+        </div>
+        <div class="fr-mini-tag">// Sustainable</div>
+      </div>
+      <div class="fr-mini" onclick="showToast('🎓 Training matters.')">
+        <div>
+          <div class="fr-mini-top">🎓</div>
+          <div class="fr-mini-title">200hr Training</div>
+          <div class="fr-mini-desc">Every barista trains 200 hours before touching our espresso machine.</div>
+        </div>
+        <div class="fr-mini-tag">// Mastery</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div class="testimonials-k">
+    <div class="testi-inner">
+      <div class="s-label">What People Say</div>
+      <div class="s-title">Guest Notes</div>
+      <div class="testi-grid-k">
+        <div class="testi-card-k">
+          <div class="testi-stars-k">★★★★★</div>
+          <p class="testi-quote-k">"I've had specialty coffee on four continents. KURO's single-origin pour-over is genuinely in the top five cups I've ever tasted. The precision here is unreal."</p>
+          <div class="testi-sep"></div>
+          <div class="testi-name-k">Alex M.</div>
+          <div class="testi-role-k">Coffee Enthusiast · Singapore</div>
+        </div>
+        <div class="testi-card-k">
+          <div class="testi-stars-k">★★★★★</div>
+          <p class="testi-quote-k">"The space feels like Tokyo met Kathmandu. Dark, intentional, beautiful. I go there to think. The matcha and the playlist are both perfect."</p>
+          <div class="testi-sep"></div>
+          <div class="testi-name-k">Priya S.</div>
+          <div class="testi-role-k">Designer · Kathmandu</div>
+        </div>
+        <div class="testi-card-k">
+          <div class="testi-stars-k">★★★★★</div>
+          <p class="testi-quote-k">"Came for the cold brew, stayed for two hours because I couldn't leave. The cardamom kouign-amann changed my understanding of what pastry can be."</p>
+          <div class="testi-sep"></div>
+          <div class="testi-name-k">Rohan K.</div>
+          <div class="testi-role-k">Writer · Patan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════
+     MENU
+═══════════════════ -->
+<div class="page" id="page-menu">
+
+  <div style="max-width:1400px;margin:0 auto">
+    <div class="menu-masthead">
+      <div class="menu-masthead-inner">
+        <div>
+          <div class="s-label">What We Serve</div>
+          <div class="s-title">The Menu</div>
+        </div>
+        <p style="font-size:.88rem;color:var(--text2);line-height:1.7;max-width:340px">
+          Every item exists because it earned its place. We remove dishes we can't do perfectly and add new ones only when they're ready.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-filter-bar">
+    <button class="mf-btn active" onclick="filterK(this,'all')">All</button>
+    <button class="mf-btn" onclick="filterK(this,'espresso')">Espresso</button>
+    <button class="mf-btn" onclick="filterK(this,'matcha')">Matcha & Tea</button>
+    <button class="mf-btn" onclick="filterK(this,'cold')">Cold Craft</button>
+    <button class="mf-btn" onclick="filterK(this,'kitchen')">Kitchen</button>
+    <button class="mf-btn" onclick="filterK(this,'bakery')">Bakery</button>
+  </div>
+
+  <div class="menu-body">
+
+    <!-- ESPRESSO -->
+    <div class="menu-section" data-k="espresso">
+      <div class="menu-s-header">
+        <div class="menu-s-title">Espresso Bar <span class="ms-bar"></span></div>
+        <div class="menu-s-sub">All available dairy-free on request · Oat, almond, coconut</div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-row" onclick="addKCart('Ristretto', 200)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A1A0A,#4A2A10)">☕</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Ristretto</div>
+            <div class="menu-row-desc">18g in · 22ml out · 22 seconds. Our purest expression. Drink it black.</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 200</div>
+            <div class="menu-row-tags"><span class="m-tag b">Classic</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Cortado', 260)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#3A1A08,#6A3010)">🔲</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Gibraltar Cortado</div>
+            <div class="menu-row-desc">Ristretto cut with equal steamed whole milk. Tokyo-style, Gibraltar glass.</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 260</div>
+            <div class="menu-row-tags"><span class="m-tag b">Signature</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Flat White', 280)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#1A0E06,#3A1E0E)">☕</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Flat White</div>
+            <div class="menu-row-desc">Double ristretto, velvety micro-foam whole milk. Tulip pour, no art needed.</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 280</div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Black Cardamom Latte', 360)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#102A10,#204020)">🌿</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Black Cardamom Latte</div>
+            <div class="menu-row-desc">Espresso, steamed oat milk, house-made black cardamom syrup, smoked salt finish</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 360</div>
+            <div class="menu-row-tags"><span class="m-tag n">New</span><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Wildflower Honey Latte', 340)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A2008,#4A3A10)">🍯</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Wildflower Honey Latte</div>
+            <div class="menu-row-desc">Oat milk, espresso, raw Mustang wildflower honey, fleur de sel</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 340</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Valrhona Dark Mocha', 380)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#1A0808,#3A1010)">🍫</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Valrhona Dark Mocha</div>
+            <div class="menu-row-desc">70% Valrhona cacao paste, double espresso, steamed whole milk, cocoa nibs</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 380</div>
+            <div class="menu-row-tags"><span class="m-tag b">Popular</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATCHA -->
+    <div class="menu-section" data-k="matcha">
+      <div class="menu-s-header">
+        <div class="menu-s-title">Matcha & Tea <span class="ms-bar"></span></div>
+        <div class="menu-s-sub">Sourced from Uji, Kyoto · Grade A · Bamboo-whisked</div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-row" onclick="addKCart('Ceremonial Matcha', 320)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#103010,#204020)">🍵</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Ceremonial Matcha</div>
+            <div class="menu-row-desc">Grade A Uji matcha, oat milk foam, vanilla bean — bamboo-whisked to order</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 320</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span><span class="m-tag b">Bestseller</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Roasted Hojicha Latte', 300)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A1808,#4A3018)">🍂</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Roasted Hojicha Latte</div>
+            <div class="menu-row-desc">Roasted green tea from Shizuoka, steamed whole milk, brown sugar foam</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 300</div>
+            <div class="menu-row-tags"><span class="m-tag n">New</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Himalayan Tulsi Ginger', 220)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#102810,#1E3C1A)">🌿</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Himalayan Tulsi Ginger</div>
+            <div class="menu-row-desc">Wild Himalayan tulsi, fresh ginger coin, raw honey, lemon wheel</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 220</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('First Flush Darjeeling', 240)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#201808,#3A2C10)">🫖</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">First Flush Darjeeling</div>
+            <div class="menu-row-desc">Single-estate spring harvest, notes of muscatel, served pure or with milk</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 240</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLD -->
+    <div class="menu-section" data-k="cold">
+      <div class="menu-s-header">
+        <div class="menu-s-title">Cold Craft <span class="ms-bar"></span></div>
+        <div class="menu-s-sub">Brewed slow · Served cold · Designed to surprise</div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-row" onclick="addKCart('Nitro Cold Brew', 380)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#080820,#141430)">🧊</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Nitro Cold Brew</div>
+            <div class="menu-row-desc">48-hour cold steep, nitrogen-charged, poured from tap. Silky, creamy, zero sugar needed.</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 380</div>
+            <div class="menu-row-tags"><span class="m-tag b">Signature</span><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Hibiscus Cold Brew Float', 360)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A0808,#4A1020)">🌺</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Hibiscus Cold Brew Float</div>
+            <div class="menu-row-desc">Cold brew, hibiscus shrub, coconut water, oat milk float, edible flower</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 360</div>
+            <div class="menu-row-tags"><span class="m-tag n">New</span><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Yuzu Matcha Soda', 340)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#102A10,#183A18)">🥤</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Yuzu Matcha Soda</div>
+            <div class="menu-row-desc">Ceremonial matcha, fresh yuzu juice, agave, sparkling water, bamboo straw</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 340</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span><span class="m-tag c">Cold</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Strawberry Shiso Tonic', 280)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A0808,#3A1010)">🍓</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Strawberry Shiso Tonic</div>
+            <div class="menu-row-desc">House strawberry-shiso shrub, premium tonic water, lime, black pepper</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 280</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KITCHEN -->
+    <div class="menu-section" data-k="kitchen">
+      <div class="menu-s-header">
+        <div class="menu-s-title">Kitchen <span class="ms-bar"></span></div>
+        <div class="menu-s-sub">Available all day · Seasonal menu changes monthly</div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-row" onclick="addKCart('Miso Avocado Toast', 520)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#0A1A08,#182A10)">🥑</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Miso Avocado Toast</div>
+            <div class="menu-row-desc">Sourdough, white miso avocado, pickled daikon, sesame, nori flakes, togarashi</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 520</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span><span class="m-tag b">Popular</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Wild Açaí Bowl', 580)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#10082A,#201040)">🫐</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Wild Açaí Bowl</div>
+            <div class="menu-row-desc">Wild-harvest açaí, banana, almond milk, house granola, seasonal fruit, bee pollen</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 580</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Roasted Grain Bowl', 560)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#1A1808,#2C2810)">🌾</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Roasted Grain Bowl</div>
+            <div class="menu-row-desc">Farro, roasted seasonal vegetables, miso tahini dressing, pomegranate, herbs</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 560</div>
+            <div class="menu-row-tags"><span class="m-tag v">Vegan</span><span class="m-tag n">New</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Chicken Katsu Sando', 620)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#1A1004,#2C1C08)">🥪</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Chicken Katsu Sando</div>
+            <div class="menu-row-desc">Japanese milk bread, panko chicken, tonkatsu mayo, shredded cabbage</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 620</div>
+            <div class="menu-row-tags"><span class="m-tag b">Signature</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAKERY -->
+    <div class="menu-section" data-k="bakery">
+      <div class="menu-s-header">
+        <div class="menu-s-title">Bakery <span class="ms-bar"></span></div>
+        <div class="menu-s-sub">Baked from 4:30 AM · Gone by noon. Early bird wins.</div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-row" onclick="addKCart('72-Hour Butter Croissant', 200)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A2008,#3A3010)">🥐</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">72-Hour Butter Croissant</div>
+            <div class="menu-row-desc">36-layer dough, Président AOP butter, three-day lamination — the only kind we make</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 200</div>
+            <div class="menu-row-tags"><span class="m-tag b">Classic</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Dark Chocolate Kouign-Amann', 280)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#1A0808,#2A1010)">🍫</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Dark Chocolate Kouign-Amann</div>
+            <div class="menu-row-desc">Caramelised laminated dough, 66% Valrhona dark chocolate centre, fleur de sel</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 280</div>
+            <div class="menu-row-tags"><span class="m-tag n">New</span><span class="m-tag b">Popular</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Yuzu Curd Tart', 320)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#1A1808,#2A2810)">🍋</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Yuzu Curd Tart</div>
+            <div class="menu-row-desc">Almond shortcrust, fresh yuzu curd, toasted meringue, yuzu zest micro-plane</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 320</div>
+            <div class="menu-row-tags"><span class="m-tag b">Seasonal</span></div>
+          </div>
+        </div>
+        <div class="menu-row" onclick="addKCart('Sakura Mochi Cinnamon Roll', 260)">
+          <div class="menu-row-icon" style="background:linear-gradient(135deg,#2A0814,#3A1020)">🌸</div>
+          <div class="menu-row-main">
+            <div class="menu-row-name">Sakura Mochi Cinnamon Roll</div>
+            <div class="menu-row-desc">Brioche dough, sakura cream cheese, salted caramel, dried cherry blossom</div>
+          </div>
+          <div class="menu-row-right">
+            <div class="menu-row-price">NPR 260</div>
+            <div class="menu-row-tags"><span class="m-tag n">New</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════
+     ABOUT / STUDIO
+═══════════════════ -->
+<div class="page" id="page-about">
+  <div class="about-masthead">
+    <div class="about-masthead-inner">
+      <div class="about-left">
+        <div class="s-label">Est. 2019 · Lazimpat</div>
+        <div class="s-title">The KURO Studio</div>
+        <p class="about-big-quote">
+          "We opened KURO because we were tired of <em>choosing between good coffee and good values.</em> You should never have to."
+        </p>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)">— Asha & Roshan, Founders</div>
+        <button class="btn-primary" style="margin-top:32px" onclick="showPage('contact')">Visit Us →</button>
+      </div>
+      <div class="about-right">
+        <div class="s-label">The Numbers</div>
+        <div class="about-stat-grid">
+          <div class="about-stat">
+            <div class="about-stat-num">2019</div>
+            <div class="about-stat-label">Founded</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">12</div>
+            <div class="about-stat-label">Origins Sourced</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">3</div>
+            <div class="about-stat-label">Awards Won</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">500+</div>
+            <div class="about-stat-label">Guests Daily</div>
+          </div>
+        </div>
+        <p style="font-size:.84rem;color:var(--text2);line-height:1.7;margin-top:28px;">
+          KURO began as a shared obsession between two Kathmandu natives who had tasted what coffee could be — and refused to accept anything less for their city.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-section">
+    <div class="s-label">The Humans</div>
+    <div class="s-title">Our Team</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar" style="background:linear-gradient(135deg,#D4A574,#8B5A2B)">👩‍🍳</div>
+        <div class="team-name">Asha Thapa</div>
+        <div class="team-role">Co-Founder · Head of Coffee</div>
+        <p class="team-bio">Trained at St. Ali in Melbourne and in Tokyo's Third Wave scene. Back in Kathmandu to redefine what Nepali café culture means. SCA-certified Q Grader.</p>
+        <div class="team-num">01</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:linear-gradient(135deg,#7BA870,#3A5A30)">👨‍🍳</div>
+        <div class="team-name">Roshan Shrestha</div>
+        <div class="team-role">Co-Founder · Executive Chef</div>
+        <p class="team-bio">Six years at Ferrandi Paris, followed by stages at Pierre Hermé and Arzak. Returned to Nepal to build something rooted in local ingredients with world-class technique.</p>
+        <div class="team-num">02</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:linear-gradient(135deg,#5096FF,#2030C0)">👨</div>
+        <div class="team-name">Laxman Gurung</div>
+        <div class="team-role">Head Barista</div>
+        <p class="team-bio">Nepal Barista Champion 2022. His extraction notes are legendary in the KTM specialty scene. Trains every new hire personally.</p>
+        <div class="team-num">03</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="values-section-k">
+    <div class="values-inner">
+      <div class="s-label">What We Believe</div>
+      <div class="s-title">Four Principles</div>
+      <div class="values-row">
+        <div class="val-card">
+          <div class="val-num">/ 01</div>
+          <div class="val-title">Radical Transparency</div>
+          <p class="val-desc">Every coffee on our menu shows the farm name, elevation, harvest date, and price paid. Nothing is hidden.</p>
+        </div>
+        <div class="val-card">
+          <div class="val-num">/ 02</div>
+          <div class="val-title">Zero Compromise</div>
+          <p class="val-desc">We'd rather close early and run out than serve a cup we're not proud of. Quality is not negotiable.</p>
+        </div>
+        <div class="val-card">
+          <div class="val-num">/ 03</div>
+          <div class="val-title">Planet Account</div>
+          <p class="val-desc">Compostable everything. Electric delivery. 1% revenue to Himalayan reforestation. This is non-optional for us.</p>
+        </div>
+        <div class="val-card">
+          <div class="val-num">/ 04</div>
+          <div class="val-title">Community Platform</div>
+          <p class="val-desc">KURO hosts 4+ events monthly. Local artists, musicians, farmers, thinkers. The café is just the stage.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════
+     CONTACT / RESERVE
+═══════════════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-masthead">
+    <div class="s-label">Come In</div>
+    <div class="s-title" style="margin-bottom:48px">Reserve Your Seat</div>
+  </div>
+
+  <div style="max-width:1400px;margin:0 auto;padding:0 60px 80px">
+    <div class="contact-body">
+      <div class="contact-left">
+        <div class="s-label">Find Us</div>
+        <div style="font-size:1.4rem;font-weight:700;letter-spacing:-0.01em;color:var(--text);margin-bottom:28px">Location &<br>Hours</div>
+
+        <ul class="info-list">
+          <li>
+            <div class="il-icon">📍</div>
+            <div>
+              <div class="il-label">Address</div>
+              <div class="il-value">Lazimpat, Kathmandu 44600<br>100m from Lazimpat Chowk</div>
+            </div>
+          </li>
+          <li>
+            <div class="il-icon">📞</div>
+            <div>
+              <div class="il-label">Phone</div>
+              <div class="il-value">+977 1 4410 999<br>+977 9800 111 222</div>
+            </div>
+          </li>
+          <li>
+            <div class="il-icon">✉️</div>
+            <div>
+              <div class="il-label">Email</div>
+              <div class="il-value">hello@kurocoffee.np</div>
+            </div>
+          </li>
+        </ul>
+
+        <table class="hours-table">
+          <tr><td>Monday – Friday</td><td>7:00 → 22:00</td></tr>
+          <tr><td>Saturday</td><td>8:00 → 23:00</td></tr>
+          <tr><td>Sunday</td><td>8:00 → 22:00</td></tr>
+          <tr><td>Public Holidays</td><td>9:00 → 21:00</td></tr>
+        </table>
+
+        <div style="margin-top:36px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;cursor:pointer" onclick="showToast('🗺️ Maps opening...')">
+          <div style="font-size:2rem">🗺</div>
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text3)">Lazimpat · Kathmandu</div>
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)">Get Directions →</div>
+        </div>
+      </div>
+
+      <div class="contact-right">
+        <div class="s-label">Book a Table</div>
+        <div style="font-size:1.4rem;font-weight:700;letter-spacing:-0.01em;color:var(--text);margin-bottom:8px">Reservation</div>
+        <p style="font-size:.82rem;color:var(--text3);margin-bottom:36px">Confirmed within 2 hours. Walk-ins always welcome.</p>
+
+        <div class="form-row-k">
+          <div class="form-group-k">
+            <label class="form-label-k">First Name</label>
+            <input class="form-input-k" type="text" placeholder="Asha">
+          </div>
+          <div class="form-group-k">
+            <label class="form-label-k">Last Name</label>
+            <input class="form-input-k" type="text" placeholder="Thapa">
+          </div>
+        </div>
+        <div class="form-group-k">
+          <label class="form-label-k">Email</label>
+          <input class="form-input-k" type="email" placeholder="asha@email.com">
+        </div>
+        <div class="form-group-k">
+          <label class="form-label-k">Phone</label>
+          <input class="form-input-k" type="tel" placeholder="+977 98XX XXX XXX">
+        </div>
+        <div class="form-row-k">
+          <div class="form-group-k">
+            <label class="form-label-k">Date</label>
+            <input class="form-input-k" type="date">
+          </div>
+          <div class="form-group-k">
+            <label class="form-label-k">Time</label>
+            <select class="form-select-k">
+              <option>7:00 AM</option><option>8:00 AM</option><option>9:00 AM</option>
+              <option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option>
+              <option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option>
+              <option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option>
+              <option>7:00 PM</option><option>8:00 PM</option><option>9:00 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-k">
+          <div class="form-group-k">
+            <label class="form-label-k">Guests</label>
+            <select class="form-select-k">
+              <option>1 Guest</option><option>2 Guests</option><option>3 Guests</option>
+              <option>4 Guests</option><option>5 Guests</option><option>6+ Guests</option>
+            </select>
+          </div>
+          <div class="form-group-k">
+            <label class="form-label-k">Zone</label>
+            <select class="form-select-k">
+              <option>No Preference</option><option>Bar Seats</option>
+              <option>Studio Table</option><option>Terrace</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group-k">
+          <label class="form-label-k">Notes</label>
+          <textarea class="form-textarea-k" placeholder="Dietary requirements, celebrations, accessibility needs..."></textarea>
+        </div>
+        <button class="submit-k" onclick="submitK()">
+          Confirm Reservation <span>→</span>
+        </button>
+        <p style="text-align:center;font-size:.68rem;color:var(--text3);margin-top:14px;letter-spacing:.04em">
+          NO PAYMENT REQUIRED · FREE CANCELLATION UP TO 2HRS PRIOR
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEVELOPER CTA -->
+<section class="kuro-cta-section">
+  <div class="kuro-cta-grid">
+    <div class="kuro-cta-text">
+      <span class="k-cta-tag">The Architecture of Coffee</span>
+      <h2 class="k-cta-title">Built by<br/><span>Sushant Raj Mishra</span></h2>
+      <p class="k-cta-desc">Merging contemporary Nepali culture with precise digital craftsmanship. Experiences that resonate across both pixels and physical spaces.</p>
+      <a href="https://sushantrm.com.np/" target="_blank" class="k-cta-btn">
+        Connect with the dev ↗
+      </a>
+    </div>
+    <div class="kuro-cta-visual">
+      <div class="k-mega-toggle-wrap">
+        <span class="k-mega-label">Override System</span>
+        <button class="k-mega-toggle" onclick="toggleTheme()" aria-label="Theme toggle">
+          <div class="k-mega-thumb" id="megaThumb">🌙</div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo-k">KUR<span>O</span></div>
+      <p class="footer-tagline-k">A place where Japanese precision meets Himalayan soul. Every cup is a meditation. Every visit, a ritual.</p>
+      <div class="footer-socials-k">
+        <div class="fsoc" onclick="showToast('📷 Instagram')">📷</div>
+        <div class="fsoc" onclick="showToast('🐦 Twitter')">🐦</div>
+        <div class="fsoc" onclick="showToast('💙 Facebook')">💙</div>
+        <div class="fsoc" onclick="showToast('🎵 TikTok')">🎵</div>
+      </div>
+    </div>
+    <div class="footer-col-k">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a onclick="showPage('home')">Home</a></li>
+        <li><a onclick="showPage('menu')">Full Menu</a></li>
+        <li><a onclick="showPage('about')">Our Studio</a></li>
+        <li><a onclick="showPage('contact')">Reserve</a></li>
+      </ul>
+    </div>
+    <div class="footer-col-k">
+      <h5>Menu</h5>
+      <ul>
+        <li><a onclick="showPage('menu')">Espresso Bar</a></li>
+        <li><a onclick="showPage('menu')">Matcha & Tea</a></li>
+        <li><a onclick="showPage('menu')">Cold Craft</a></li>
+        <li><a onclick="showPage('menu')">Kitchen & Bakery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col-k">
+      <h5>Visit</h5>
+      <ul>
+        <li><a>Lazimpat, Kathmandu</a></li>
+        <li><a>Mon–Fri · 7AM – 10PM</a></li>
+        <li><a>Sat–Sun · 8AM – 11PM</a></li>
+        <li><a onclick="showToast('📞 Calling...')">+977 1 4410 999</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom-k">
+    <div class="footer-copy-k">© 2024 KURO Coffee Studio · Kathmandu, Nepal</div>
+    <div class="footer-badge"><div class="badge-line"></div> Specialty Coffee · Since 2019 <div class="badge-line"></div></div>
+  </div>
+</footer>
+
+<!-- ── CART OVERLAY ── -->
+<div class="k-cart-overlay" id="kCartOverlay">
+  <div class="k-cart-panel" id="kCartPanel">
+    <!-- View 1: Cart Items -->
+    <div class="k-cart-step active" id="kcs1">
+      <div class="k-cart-head">
+        <h3 class="k-cart-title">Your Order</h3>
+        <button class="k-cart-close" onclick="kCloseCart()">✕</button>
+      </div>
+      <div class="k-cart-body" id="kCartList">
+        <div class="k-cart-empty">Your tray is empty.<br/>Add something from the menu.</div>
+      </div>
+      <div class="k-cart-foot">
+        <div class="k-cf-row">
+          <span class="k-cf-label">Total Estimate</span>
+          <span class="k-cf-val" id="kCartSum">NPR 0</span>
+        </div>
+        <button class="submit-k" style="margin-top:0" onclick="kChangeStep(2)">Proceed to Details ↗</button>
+      </div>
+    </div>
+
+    <!-- View 2: Booking Details -->
+    <div class="k-cart-step" id="kcs2">
+      <div class="k-cart-head">
+        <button class="k-cart-close" style="font-size:1.2rem; margin-right:20px" onclick="kChangeStep(1)">←</button>
+        <h3 class="k-cart-title">Order Details</h3>
+        <button class="k-cart-close" onclick="kCloseCart()" style="margin-left:auto">✕</button>
+      </div>
+      <div class="k-cart-body" style="padding: 24px 40px">
+        <div class="form-group-k">
+          <label class="form-label-k">Name</label>
+          <input type="text" id="kOrderName" class="form-input-k" placeholder="Entering the void...">
+        </div>
+        <div class="form-group-k">
+          <label class="form-label-k">Contact Info</label>
+          <input type="text" id="kOrderContact" class="form-input-k" placeholder="Email or Phone">
+        </div>
+        <div class="form-group-k">
+          <label class="form-label-k">Service Type</label>
+          <select class="form-select-k" id="kOrderType">
+            <option>Prepare for Dine-In</option>
+            <option>Prepare for Takeaway</option>
+          </select>
+        </div>
+        <div class="form-group-k">
+          <label class="form-label-k">Special Requests</label>
+          <textarea class="form-textarea-k" id="kOrderNotes" placeholder="No sugar, extra ice..." style="min-height: 60px"></textarea>
+        </div>
+      </div>
+      <div class="k-cart-foot">
+        <button class="submit-k" style="margin-top:0" onclick="kPlaceOrder()">Place Order ✓</button>
+      </div>
+    </div>
+
+    <!-- View 3: Success -->
+    <div class="k-cart-step" id="kcs3">
+      <div class="k-success-view">
+        <div class="k-sv-icon">✦</div>
+        <div class="k-sv-title">Request Received</div>
+        <div class="k-sv-desc">Your order is being prepared by our baristas. We will notify you when it is ready.</div>
+        <button class="btn-ghost" onclick="kCloseCart()">Close Panel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CART PILL ── -->
+<div class="k-cart-pill" id="kCartPill" onclick="kOpenCart()">
+  <span class="k-cart-label">View Order</span>
+  <span class="k-cart-count" id="kCartCount">0</span>
+</div>
+
+<!-- Toast -->
+<div class="toast-k" id="toastK"></div>
+
+<script>
+  /* custom cursor */
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top  = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top  = e.clientY + 'px';
+    }, 60);
+  });
+
+  /* theme */
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('kuro_theme', newTheme);
+    
+    // Header toggle
+    const knob = document.getElementById('themeKnob');
+    const label = document.getElementById('themeLabel');
+    if(knob) knob.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    if(label) label.textContent = newTheme === 'dark' ? 'Dark' : 'Light';
+    
+    // Mega toggle
+    const mThumb = document.getElementById('megaThumb');
+    if(mThumb) mThumb.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    
+    showToast('✦ ' + newTheme.toUpperCase() + ' MODE ACTIVATED');
+  }
+
+  // Persistence
+  (function() {
+    const saved = localStorage.getItem('kuro_theme');
+    if(saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      const knob = document.getElementById('themeKnob');
+      const label = document.getElementById('themeLabel');
+      const mThumb = document.getElementById('megaThumb');
+      if(knob) knob.textContent = saved === 'dark' ? '🌙' : '☀️';
+      if(label) label.textContent = saved === 'dark' ? 'Dark' : 'Light';
+      if(mThumb) mThumb.textContent = saved === 'dark' ? '🌙' : '☀️';
+    }
+  })();
+
+  /* nav */
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-center a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const el = document.getElementById('nav-' + id);
+    if(el) el.classList.add('active');
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  /* mob menu */
+  function toggleMob() {
+    document.getElementById('mobMenu').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const m = document.getElementById('mobMenu');
+    const h = document.getElementById('hamburger');
+    if(m.classList.contains('open') && !m.contains(e.target) && !h.contains(e.target))
+      m.classList.remove('open');
+  });
+
+  /* menu filter */
+  function filterK(btn, cat) {
+    document.querySelectorAll('.mf-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.menu-section').forEach(s => {
+      s.style.display = (cat === 'all' || s.dataset.k === cat) ? '' : 'none';
+    });
+  }
+
+  /* toast */
+  let tt;
+  function showToast(msg) {
+    const t = document.getElementById('toastK');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(tt);
+    tt = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* cart system */
+  let kCart = [];
+  
+  function addKCart(item, price) {
+    kCart.push({ id: Date.now(), name: item, price: price });
+    updateKCart();
+    showToast('✦ Added: ' + item);
+  }
+
+  function remKCart(id) {
+    kCart = kCart.filter(i => i.id !== id);
+    updateKCart();
+  }
+
+  function updateKCart() {
+    const pill = document.getElementById('kCartPill');
+    const count = document.getElementById('kCartCount');
+    const list = document.getElementById('kCartList');
+    const sumEl = document.getElementById('kCartSum');
+    
+    count.textContent = kCart.length;
+    if(kCart.length > 0) pill.classList.add('visible');
+    else pill.classList.remove('visible');
+
+    if(kCart.length === 0) {
+      list.innerHTML = `<div class="k-cart-empty">Your tray is empty.<br/>Add something from the menu.</div>`;
+      sumEl.textContent = 'NPR 0';
+      return;
+    }
+
+    let sum = 0;
+    list.innerHTML = kCart.map(item => {
+      sum += item.price;
+      return `
+        <div class="k-cart-item">
+          <div class="k-ci-info">
+            <div class="k-ci-name">${item.name}</div>
+            <div class="k-ci-price">NPR ${item.price}</div>
+          </div>
+          <button class="k-ci-del" onclick="remKCart(${item.id})">✕</button>
+        </div>
+      `;
+    }).join('');
+    sumEl.textContent = 'NPR ' + sum;
+  }
+
+  function kOpenCart() {
+    document.getElementById('kCartOverlay').classList.add('open');
+    kChangeStep(1);
+  }
+
+  function kCloseCart() {
+    document.getElementById('kCartOverlay').classList.remove('open');
+  }
+
+  function kChangeStep(step) {
+    document.getElementById('kcs1').classList.toggle('active', step === 1);
+    document.getElementById('kcs2').classList.toggle('active', step === 2);
+    document.getElementById('kcs3').classList.toggle('active', step === 3);
+  }
+
+  function kPlaceOrder() {
+    if(kCart.length === 0) return showToast('Cart is empty.');
+    const name = document.getElementById('kOrderName').value;
+    if(!name) return showToast('Please provide a name.');
+    
+    kCart = [];
+    updateKCart();
+    kChangeStep(3);
+  }
+
+  /* submit */
+  function submitK() {
+    showToast('✓ Reservation Confirmed — See you soon.');
+  }
+</script>
+</body>
+</html>
